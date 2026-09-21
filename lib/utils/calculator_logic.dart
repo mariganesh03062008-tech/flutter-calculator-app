@@ -8,6 +8,11 @@ class CalculatorLogic {
     return char == '+' || char == '-' || char == '×' || char == '÷' || char == '%';
   }
 
+  /// Checks if a character is an infix operator that expects a right operand.
+  static bool isInfixOperator(String char) {
+    return char == '+' || char == '-' || char == '×' || char == '÷';
+  }
+
   /// Evaluates an expression string and returns the formatted result.
   /// Supported operators: +, -, ×, ÷, %
   static String evaluateExpression(String expression) {
@@ -16,8 +21,8 @@ class CalculatorLogic {
     // Sanitize string
     String cleanExp = expression.replaceAll(' ', '');
 
-    // Trim trailing operators for live evaluation
-    while (cleanExp.isNotEmpty && isOperator(cleanExp[cleanExp.length - 1])) {
+    // Trim trailing infix operators (+, -, ×, ÷) for live evaluation, keep postfix (%)
+    while (cleanExp.isNotEmpty && isInfixOperator(cleanExp[cleanExp.length - 1])) {
       cleanExp = cleanExp.substring(0, cleanExp.length - 1);
     }
 
@@ -27,8 +32,8 @@ class CalculatorLogic {
       List<String> tokens = _tokenize(cleanExp);
       if (tokens.isEmpty) return '';
 
-      // Check if ends with operator after tokenizing
-      if (isOperator(tokens.last)) {
+      // Check if ends with infix operator after tokenizing
+      if (isInfixOperator(tokens.last)) {
         tokens.removeLast();
       }
       if (tokens.isEmpty) return '';
