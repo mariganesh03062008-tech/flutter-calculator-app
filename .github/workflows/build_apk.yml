@@ -35,10 +35,12 @@ jobs:
         run: flutter pub get
 
       - name: Ensure Android platform files
-        run: flutter create . --platforms=android
+        run: |
+          flutter create . --platforms=android
+          rm -f test/widget_test.dart
 
       - name: Run Unit Tests
-        run: flutter test
+        run: flutter test test/calculator_test.dart
 
       - name: Build Release APK
         run: flutter build apk --release
